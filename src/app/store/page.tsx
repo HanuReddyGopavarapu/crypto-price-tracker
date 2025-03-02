@@ -2,10 +2,10 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import CryptoList from './components/CryptoList';
-import SearchBar from './components/SearchBar';
-import useCryptoPrices from './hooks/useCryptoPrices';
-import useSearchStore from './store/searchStore';
+import CryptoList from '../components/CryptoList';
+import SearchBar from '../components/SearchBar';
+import useCryptoPrices from '../hooks/useCryptoPrices';
+import useSearchStore from './searchStore';
 
 const Home: React.FC = () => {
   const { search } = useSearchStore();

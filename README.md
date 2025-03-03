@@ -2,7 +2,7 @@
 
 A Next.js-based application to track cryptocurrency prices in real-time. This project includes a search bar, a list of cryptocurrencies, and a price chart.
 
-link - https://cryptopricetracker-n7go25msi-gopavarapupandu-gmailcoms-projects.vercel.app/
+link - [https://cryptopricetracker-n7go25msi-gopavarapupandu-gmailcoms-projects.vercel.app/](https://cryptopricetracker-8pc08whzy-gopavarapupandu-gmailcoms-projects.vercel.app)
 
 ## Features
 

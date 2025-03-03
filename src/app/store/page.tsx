@@ -7,6 +7,10 @@ import SearchBar from '../components/SearchBar';
 import useCryptoPrices from '../hooks/useCryptoPrices';
 import useSearchStore from './searchStore';
 
+
+
+
+
 const Home: React.FC = () => {
   const { search } = useSearchStore();
   const { data, error, refetch, isLoading } = useCryptoPrices();
@@ -50,7 +54,7 @@ const Home: React.FC = () => {
 
       {/* Crypto List */}
       <div className="w-full max-w-4xl">
-        <CryptoList data={filteredData} search={search} />
+        <CryptoList data={filteredData} search={search}  />
       </div>
     </main>
   );

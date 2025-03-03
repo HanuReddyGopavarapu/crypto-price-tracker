@@ -9,17 +9,19 @@ interface CryptoData {
   [key: string]: { usd: number };
 }
 
-interface CryptoListProps {
-  data?: CryptoData;
-  search: string; // Pass search term from parent
-}
-
 interface NewsArticle {
   id: string;
   title: string;
   url: string;
   source: string;
 }
+
+interface CryptoList {
+  data?: CryptoData;
+  search: string;
+  flash?: boolean; // Add flash prop
+}
+
 
 const cryptoIcons: { [key: string]: JSX.Element } = {
   bitcoin: <FaBitcoin className="text-orange-500" />,
@@ -30,7 +32,7 @@ const cryptoIcons: { [key: string]: JSX.Element } = {
   ripple: <SiRipple className="text-teal-500" />,
 };
 
-const CryptoList: React.FC<CryptoListProps> = ({ data = {}, search }) => {
+const CryptoList: React.FC<CryptoList> = ({ data = {}, search, flash }) => {
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
   const [news, setNews] = useState<NewsArticle[]>([]);
   const [chartData, setChartData] = useState<[number, number][]>([]);
@@ -38,13 +40,11 @@ const CryptoList: React.FC<CryptoListProps> = ({ data = {}, search }) => {
   // Fetch news and chart data when a card is expanded
   useEffect(() => {
     if (expandedCard) {
-      // Fetch news
       axios
         .get(`https://min-api.cryptocompare.com/data/v2/news/?categories=${expandedCard.toUpperCase()}`)
         .then((response) => setNews(response.data.Data))
         .catch((error) => console.error('Error fetching news:', error));
 
-      // Fetch chart data (example using CoinGecko)
       axios
         .get(`https://api.coingecko.com/api/v3/coins/${expandedCard}/market_chart?vs_currency=usd&days=7`)
         .then((response) => setChartData(response.data.prices))
@@ -59,21 +59,16 @@ const CryptoList: React.FC<CryptoListProps> = ({ data = {}, search }) => {
       if (matchedKey) {
         setExpandedCard(matchedKey);
       } else {
-        setExpandedCard(null); // Collapse all cards if no match
+        setExpandedCard(null);
       }
     } else {
-      setExpandedCard(null); // Collapse all cards if search is empty
+      setExpandedCard(null);
     }
   }, [search, data]);
 
   return (
     <div className="w-full">
-      <div
-        className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6"
-        style={{
-          gridAutoFlow: 'row', // Ensure cards flow in rows
-        }}
-      >
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
         {Object.entries(data).map(([key, value]) => (
           <motion.div
             key={key}
@@ -81,7 +76,7 @@ const CryptoList: React.FC<CryptoListProps> = ({ data = {}, search }) => {
               expandedCard === key ? 'sm:col-span-3' : ''
             }`}
             style={{
-              gridColumn: expandedCard === key ? '1 / -1' : 'auto', // Force full width on expansion
+              gridColumn: expandedCard === key ? '1 / -1' : 'auto',
             }}
             whileHover={{ scale: expandedCard === key ? 1 : 1.05 }}
             whileTap={{ scale: expandedCard === key ? 1 : 0.95 }}
@@ -96,7 +91,11 @@ const CryptoList: React.FC<CryptoListProps> = ({ data = {}, search }) => {
                 <p className="text-sm text-gray-200">Cryptocurrency</p>
               </div>
             </div>
-            <p className="text-lg sm:text-xl font-bold text-white mt-3">
+            <p
+              className={`text-lg sm:text-xl font-bold mt-3 ${
+                flash ? 'text-yellow-400' : 'text-white'
+              } transition-colors duration-500`}
+            >
               ${value.usd.toLocaleString()}
             </p>
 
